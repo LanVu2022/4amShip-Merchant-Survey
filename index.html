@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>4amShip Merchant Survey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: outfit, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #F4F8FB 0%, #EEF6F5 50%, #F8F4EC 100%);
+            color: #111827;
+            min-height: 100vh;
+            padding: 2.5rem 1.5rem;
+        }
+
+        .container {
+            max-width: 64rem;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+            margin-bottom: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+        .brand-orange {
+            color: #F86931;
+        }
+
+        .brand-blue {
+            color: #223F61;
+        }
+    
+
+        .subtitle {
+            font-size: 1.125rem;
+            color: #4b5563;
+            max-width: 48rem;
+            margin: 0 auto 2rem auto;
+            line-height: 1.6;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            max-width: 48rem;
+            margin: 0 auto 2rem auto;
+        }
+
+        @media (min-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+
+        input, textarea, select {
+            border-radius: 1rem;
+            border: 1px solid #d1d5db;
+            background-color: #f9fafb;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            color: #111827;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #43BFA1;
+            box-shadow: 0 0 0 2px rgba(67, 191, 161, 0.2);
+            background-color: white;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #9ca3af;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #223F61;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .question-block {
+            margin-bottom: 1.75rem;
+        }
+
+        .question-text {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+
+        @media (min-width: 768px) {
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.75rem;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background-color: #f9fafb;
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            border: 1px solid #e5e7eb;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+            color: #374151;
+        }
+
+        .option-label:hover {
+            background-color: #f3f4f6;
+            border-color: #43BFA1;
+        }
+
+        input[type="checkbox"] {
+            width: 1.125rem;
+            height: 1.125rem;
+            margin: 0;
+            cursor: pointer;
+            accent-color: #F86931;
+            flex-shrink: 0;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 2rem auto 0;
+            padding: 1rem 2rem;
+            background-color: #43BFA1;
+            color: white;
+            border: none;
+            border-radius: 1rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .status-message {
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .status-success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-loading {
+            background-color: #e0e7ff;
+            color: #3730a3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1> <span class="brand-blue">4</span><span class="brand-orange">am</span><span class="brand-blue">Ship</span> Merchant Survey</h1>
+        <p class="subtitle">Help us understand your shipping workflow, operational challenges, and automation needs so we can build a better shipping platform for growing e-commerce businesses.</p>
+        
+        <div class="info-grid">
+            <div class="form-group">
+                <label>Business Email *</label>
+                <input type="email" id="businessEmail" placeholder="you@company.com">
+            </div>
+            <div class="form-group">
+                <label>Company Name *</label>
+                <input type="text" id="companyName" placeholder="Your Company">
+            </div>
+        </div>
+    </div>
+
+    <div id="surveyContainer"></div>
+
+    <button class="submit-btn" id="submitBtn">Submit & Help Shape 4amShip</button>
+    <div id="statusMessage" class="status-message" style="display: none;"></div>
+</div>
+
+<script>
+    const questionsData = [
+        {
+            section: 'Merchant Background',
+            items: [
+                { question: '1. What type of business do you operate?', field: 'businessType', options: ['D2C Brand', 'Marketplace Seller', '3PL / Warehouse', 'Retailer', 'Agency / Aggregator', 'Other'] },
+                { question: '2. Which marketplaces or platforms do you currently use?', field: 'platforms', options: ['Shopify', 'Amazon', 'TikTok Shop', 'WooCommerce', 'Walmart', 'eBay', 'Etsy', 'Other'] },
+                { question: '3. Approximately how many orders do you ship monthly?', field: 'monthlyOrders', options: ['<500', '500–2,000', '2,000–10,000', '10,000–50,000', '50,000+'] }
+            ]
+        },
+        {
+            section: 'Shipping Operations',
+            items: [
+                { question: '4. How are you currently managing shipping labels?', field: 'labelManagement', options: ['Manual label creation', 'Bulk label software', 'ERP/WMS integration', '3PL handles shipping', 'Other'] },
+                { question: '5. Which shipping platforms/tools do you currently use?', field: 'shippingTools', options: ['ShipStation', 'EasyPost', 'Pirate Ship', 'Shippo', 'EasyShip', 'In-house tools', 'Other'] },
+                { question: '6. What are your biggest shipping pain points?', field: 'painPoints', options: ['High shipping costs', 'Manual operational workload', 'Slow label generation', 'Tracking visibility', 'Carrier reliability', 'Address errors', 'Limited automation', 'Poor customer support', 'Difficult integrations', 'Billing reconciliation', 'Other'] }
+            ]
+        },
+        {
+            section: 'Automation & Efficiency',
+            items: [
+                { question: '7. How automated is your current shipping workflow?', field: 'automationLevel', options: ['Fully manual', 'Mostly manual', 'Partially automated', 'Highly automated'] },
+                { question: '8. Which automation features would be most valuable to you?', field: 'desiredAutomation', options: ['Automatic carrier selection', 'SKU-based shipping rules', 'Bulk label generation', 'Order splitting', 'Tracking sync', 'Rate comparison', 'Address validation', 'Automation exception alerts', 'Analytics/reporting'] },
+                { question: '9. How important is shipping automation to your future growth?', field: 'automationImportance', options: ['Not important', 'Somewhat important', 'Important', 'Very important', 'Critical'] }
+            ]
+        },
+        {
+            section: 'Cost & Pricing',
+            items: [
+                { question: '10. What matters most when choosing a shipping platform?', field: 'selectionCriteria', options: ['Lower shipping rates', 'Ease of use', 'Automation', 'Integration capability', 'Customer support', 'Tracking visibility', 'Reliability/stability', 'Fast onboarding', 'Flexible pricing'] },
+                { question: '11. Would you switch shipping platforms for meaningful shipping cost savings?', field: 'wouldSwitch', options: ['Yes', 'Maybe', 'No'] },
+                { question: '12. What would most likely motivate you to switch providers?', field: 'switchMotivation', options: ['Better shipping rates', 'Better automation', 'Easier workflows', 'Better customer support', 'Better integrations', 'Faster onboarding', 'Better reporting/analytics'] }
+            ]
+        },
+        {
+            section: 'Integrations & Technical Needs',
+            items: [
+                { question: '13. Which integrations are most important to your business?', field: 'integrations', options: ['Shopify', 'Amazon', 'TikTok Shop', 'ERP systems', 'WMS systems', 'OMS systems', 'Accounting software', 'API access'] }
+            ]
+        },
+        {
+            section: 'Open Feedback',
+            items: [
+                { question: '14. What frustrates you most about your current shipping workflow?', field: 'frustrations', textarea: true },
+                { question: '15. What would an ideal shipping platform look like for your business?', field: 'idealPlatform', textarea: true },
+                { question: '16. Approximately how many hours does your team spend managing shipping operations weekly?', field: 'weeklyHours', options: ['<5 hours', '5–10 hours', '10–20 hours', '20–40 hours', '40+ hours'] }
+            ]
+        }
+    ];
+
+    let answers = {};
+
+    function initAnswers() {
+        for (const section of questionsData) {
+            for (const item of section.items) {
+                if (item.field) {
+                    if (item.options) {
+                        answers[item.field] = [];
+                    } else if (item.textarea) {
+                        answers[item.field] = '';
+                    }
+                }
+            }
+        }
+        answers.businessEmail = '';
+        answers.companyName = '';
+    }
+
+    // 修复：直接处理复选框变化，不再使用 onclick 委托
+    function setupCheckboxListeners() {
+        // 使用事件委托，监听整个容器上的 change 事件
+        const container = document.getElementById('surveyContainer');
+        if (!container) return;
+        
+        container.addEventListener('change', function(e) {
+            const target = e.target;
+            if (target.type === 'checkbox') {
+                const fieldName = target.getAttribute('data-field');
+                const value = target.value;
+                
+                if (!answers[fieldName]) answers[fieldName] = [];
+                
+                if (target.checked) {
+                    if (!answers[fieldName].includes(value)) {
+                        answers[fieldName].push(value);
+                    }
+                } else {
+                    const index = answers[fieldName].indexOf(value);
+                    if (index > -1) {
+                        answers[fieldName].splice(index, 1);
+                    }
+                }
+            }
+        });
+    }
+
+    function handleTextChange(field, value) {
+        answers[field] = value;
+    }
+
+    function renderSurvey() {
+        const container = document.getElementById('surveyContainer');
+        if (!container) return;
+
+        let html = '';
+        for (let sIdx = 0; sIdx < questionsData.length; sIdx++) {
+            const section = questionsData[sIdx];
+            html += `<div class="card"><div class="section-title">${section.section}</div>`;
+            for (let qIdx = 0; qIdx < section.items.length; qIdx++) {
+                const item = section.items[qIdx];
+                const fieldName = item.field || `field_${sIdx}_${qIdx}`;
+                html += `<div class="question-block"><div class="question-text">${item.question}</div>`;
+
+                if (item.options) {
+                    html += `<div class="options-grid">`;
+                    for (let optIdx = 0; optIdx < item.options.length; optIdx++) {
+                        const opt = item.options[optIdx];
+                        const escapedOpt = opt.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        // 移除 onclick，使用标准的 label + input 组合
+                        html += `
+                            <label class="option-label">
+                                <input type="checkbox" value="${escapedOpt}" data-field="${fieldName}">
+                                <span>${opt}</span>
+                            </label>
+                        `;
+                    }
+                    html += `</div>`;
+                } else if (item.textarea) {
+                    html += `<textarea id="textarea-${fieldName}" placeholder="Type your answer here..." data-field="${fieldName}"></textarea>`;
+                }
+                html += `</div>`;
+            }
+            html += `</div>`;
+        }
+        container.innerHTML = html;
+        
+        // 重新绑定文本域的输入事件
+        for (const section of questionsData) {
+            for (const item of section.items) {
+                if (item.textarea && item.field) {
+                    const ta = document.getElementById(`textarea-${item.field}`);
+                    if (ta) {
+                        ta.addEventListener('input', function(e) {
+                            handleTextChange(item.field, e.target.value);
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    async function submitToGoogleSheet() {
+        const businessEmail = document.getElementById('businessEmail')?.value.trim() || '';
+        const companyName = document.getElementById('companyName')?.value.trim() || '';
+        
+        if (!businessEmail || !companyName) {
+            showStatus('Please fill in both Business Email and Company Name.', 'error');
+            return false;
+        }
+        
+        if (!businessEmail.includes('@') || !businessEmail.includes('.')) {
+            showStatus('Please enter a valid email address.', 'error');
+            return false;
+        }
+        
+        const submissionData = {
+            timestamp: new Date().toISOString(),
+            businessEmail: businessEmail,
+            companyName: companyName
+        };
+        
+        for (const key in answers) {
+            if (Array.isArray(answers[key])) {
+                submissionData[key] = answers[key].join(', ');
+            } else {
+                submissionData[key] = answers[key] || '';
+            }
+        }
+        
+        const allFields = ['businessType', 'platforms', 'monthlyOrders', 'labelManagement', 'shippingTools', 'painPoints', 'automationLevel', 'desiredAutomation', 'automationImportance', 'selectionCriteria', 'wouldSwitch', 'switchMotivation', 'integrations', 'frustrations', 'idealPlatform', 'weeklyHours'];
+        for (const field of allFields) {
+            if (submissionData[field] === undefined) {
+                submissionData[field] = '';
+            }
+        }
+        
+        // ==================== REPLACE WITH YOUR GOOGLE APPS SCRIPT URL ====================
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxJN-OKzteRo9sYggXCuC8DirL39NfUMktQxn03BQAJA1c9V-RJq-XRWEQSAsNSHx4/exec';
+        
+        showStatus('Submitting, please wait...', 'loading');
+        const submitBtn = document.getElementById('submitBtn');
+        if (submitBtn) submitBtn.disabled = true;
+        
+        try {
+            const params = new URLSearchParams();
+            for (const [key, value] of Object.entries(submissionData)) {
+                params.append(key, value);
+            }
+            
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: params.toString()
+            });
+            
+            showStatus('Thank you! Your survey has been submitted successfully.', 'success');
+            resetForm();
+            return true;
+        } catch (error) {
+            console.error('Submission Error:', error);
+            showStatus('Submission failed: ' + (error.message || 'Network error, please try again later.'), 'error');
+            return false;
+        } finally {
+            if (submitBtn) submitBtn.disabled = false;
+        }
+    }
+    
+    function showStatus(msg, type) {
+        const statusDiv = document.getElementById('statusMessage');
+        if (!statusDiv) return;
+        statusDiv.style.display = 'block';
+        statusDiv.textContent = msg;
+        statusDiv.className = `status-message status-${type}`;
+        if (type !== 'loading') {
+            setTimeout(() => {
+                if (statusDiv.style.display === 'block') {
+                    statusDiv.style.display = 'none';
+                }
+            }, 5000);
+        }
+    }
+    
+    function resetForm() {
+        // 重置所有复选框
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+        // 重置所有文本域
+        document.querySelectorAll('textarea').forEach(ta => ta.value = '');
+        // 重置邮箱和公司名称
+        const emailInput = document.getElementById('businessEmail');
+        const companyInput = document.getElementById('companyName');
+        if (emailInput) emailInput.value = '';
+        if (companyInput) companyInput.value = '';
+        // 重置 answers 对象
+        initAnswers();
+        // 重新渲染问卷（保持界面干净）
+        renderSurvey();
+    }
+    
+    // 初始化
+    initAnswers();
+    renderSurvey();
+    setupCheckboxListeners();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', submitToGoogleSheet);
+    }
+</script>
+</body>
+</html>
