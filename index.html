@@ -251,7 +251,7 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1><span class="brand-orange">4</span><span class="brand-blue">am</span><span class="brand-blue">Ship Merchant Survey</span></h1>
+        <h1><span class="brand-blue">4</span><span class="brand-orange">am</span><span class="brand-blue">Ship Merchant Survey</span></h1>
         <p class="subtitle">Help us understand your shipping workflow, operational challenges, and automation needs so we can build a better shipping platform for growing e-commerce businesses.</p>
         
         <div class="info-grid">
@@ -280,42 +280,29 @@
             items: [
                 { question: '1. What type of business do you operate?', field: 'businessType', options: ['D2C Brand', 'Marketplace Seller', '3PL / Warehouse', 'Retailer', 'Agency / Aggregator', 'Other'] },
                 { question: '2. Which marketplaces or platforms do you currently use?', field: 'platforms', options: ['Shopify', 'Amazon', 'TikTok Shop', 'WooCommerce', 'Walmart', 'eBay', 'Etsy', 'Other'] },
-                // 修改 3: 更新订单量区间
-                { question: '3. Approximately how many orders do you ship monthly?', field: 'monthlyOrders', options: ['< 500', '501-2,000', '2,001-5,000', '5,001-10,000', '10,001-25,000', '25,000+'] }
+                { question: '3. Approximately how many orders do you ship monthly?', field: 'monthlyOrders', options: ['< 500', '501-2,000', '2,001-5,000', '5,001-10,000', '10,001-25,000', '25,000+'] },
             ]
         },
         {
             section: 'Shipping Operations',
             items: [
-                // 移除 4: 删除 "How are you currently managing shipping labels?"
                 { question: '4. Which shipping platforms/tools do you currently use?', field: 'shippingTools', options: ['ShipStation', 'EasyPost', 'Pirate Ship', 'Shippo', 'EasyShip', 'In-house tools', 'Other'] },
                 { question: '5. Which shipping features are you currently using?', field: 'shipstationFeatures', options: ['Batch label printing', 'Rate comparison', 'Order management', 'Tracking updates', 'Inventory management', 'Returns management', 'Custom automation rules', 'International shipping', 'Branded tracking', 'Analytics dashboard', 'Other'] },
-                { question: '6. What are your biggest shipping pain points?', field: 'painPoints', options: ['High shipping costs', 'Manual operational workload', 'Slow label generation', 'Tracking visibility', 'Carrier reliability', 'Address errors', 'Limited automation', 'Poor customer support', 'Difficult integrations', 'Billing reconciliation', 'Other'] }
-            ]
-        },
-        {
-            section: 'Marketplace Integrations',
-            items: [
-                { question: '7. Which marketplace integrations are most important to your business?', field: 'integrations', options: ['Amazon Seller Central', 'Shopify', 'WooCommerce', 'BigCommerce','TikTok Shop', 'SQUARSPACE','eBay', 'Walmart', 'Etsy', 'Other'] }
-            ]
-        },
-        {
-            section: 'Shipping Locations',
-            items: [
-                { question: '8. Where do you currently ship out of?', field: 'shippingLocation', options: ['Home', 'Self-operated warehouse', '3PL (Third Party Logistics)', 'Multiple locations', 'Other'] }
+                { question: '6. What are your biggest shipping pain points?', field: 'painPoints', options: ['High shipping costs', 'Manual operational workload', 'Slow label generation', 'Tracking visibility', 'Carrier reliability', 'Address errors', 'Limited automation', 'Poor customer support', 'Difficult integrations', 'Billing reconciliation', 'Other'] },
+                { question: '7. Where do you currently ship out of?', field: 'shippingLocation', options: ['Home', 'Self-operated warehouse', '3PL (Third Party Logistics)', 'Multiple locations', 'Other'] }
             ]
         },
         {
             section: 'System Features & Integrations',
             items: [
-                { question: '9. Are you using any other systems that integrate with your shipping platform?', field: 'otherIntegrations', textarea: true, placeholder: 'Please list any other systems or integrations you use...' }
+                { question: '8. Which kind of the following system do you integrate with your shipping platform?', field: 'systemIntegrations', options: ['WMS (Warehouse Management System)', 'OMS (Order Management System)', 'ERP (Enterprise Resource Planning)', '3PL / Fulfillment Center Integration', 'Inventory Management System', 'CRM (Customer Relationship Management)', 'Custom / In-house System', 'None of the above', 'Other'] },
+                { question: '9. Please specify the names of the systems you selected above (e.g., "Oracle NetSuite ERP", "Manhattan WMS", "Salesforce CRM"):', field: 'systemNames', textarea: true, placeholder: 'Please list the specific system names for each integration you selected...' }
             ]
         }
     ];
 
     // ==================== 存储答案 ====================
     let answers = {};
-    let otherValues = {};
 
     function initAnswers() {
         for (const section of questionsData) {
@@ -387,7 +374,6 @@
                     if (!answers[fieldName].includes(value)) {
                         answers[fieldName].push(value);
                     }
-                    // 显示 Other 输入框
                     if (isOther) {
                         const otherDiv = document.getElementById(`other-${fieldName}`);
                         if (otherDiv) otherDiv.classList.add('show');
@@ -397,7 +383,6 @@
                     if (index > -1) {
                         answers[fieldName].splice(index, 1);
                     }
-                    // 隐藏 Other 输入框并清空值
                     if (isOther) {
                         const otherDiv = document.getElementById(`other-${fieldName}`);
                         if (otherDiv) {
@@ -444,91 +429,85 @@
 
     // ==================== 提交到 Google Sheet ====================
     // ⚠️ 请替换为你的 Apps Script URL
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwcssWGAUCooCN4_FHx5l-Ea7-IVlTaOPs8qaCQf-7_1QgEdANmEPR4xEDj8pVAhUc/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/你的ID/exec';
 
     async function submitToGoogleSheet() {
-    const businessEmail = document.getElementById('businessEmail')?.value.trim() || '';
-    const companyName = document.getElementById('companyName')?.value.trim() || '';
-    
-    if (!businessEmail || !companyName) {
-        showStatus('Please fill in both Business Email and Company Name.', 'error');
-        return;
-    }
-    
-    if (!businessEmail.includes('@')) {
-        showStatus('Please enter a valid email address.', 'error');
-        return;
-    }
-    
-    const submissionData = {
-        businessEmail: businessEmail,
-        companyName: companyName
-    };
-    
-    // 处理每个字段，将 Other 的内容合并到主字段
-    for (const key in answers) {
-        let value = answers[key];
+        const businessEmail = document.getElementById('businessEmail')?.value.trim() || '';
+        const companyName = document.getElementById('companyName')?.value.trim() || '';
         
-        // 如果是数组（多选）
-        if (Array.isArray(value)) {
-            // 检查是否有 Other 对应的自定义值
-            const otherKey = `${key}_other`;
-            const otherValue = answers[otherKey];
+        if (!businessEmail || !companyName) {
+            showStatus('Please fill in both Business Email and Company Name.', 'error');
+            return;
+        }
+        
+        if (!businessEmail.includes('@')) {
+            showStatus('Please enter a valid email address.', 'error');
+            return;
+        }
+        
+        const submissionData = {
+            businessEmail: businessEmail,
+            companyName: companyName
+        };
+        
+        // 合并 Other 内容到主字段
+        for (const key in answers) {
+            let value = answers[key];
             
-            if (otherValue && otherValue.trim()) {
-                // 如果已经选了 "Other"，替换为自定义内容
-                const hasOther = value.includes('Other');
-                if (hasOther) {
-                    // 移除 "Other"，添加自定义内容
-                    value = value.filter(v => v !== 'Other');
-                    value.push(`Other: ${otherValue}`);
-                } else if (otherValue.trim()) {
-                    // 没选 Other 但填了内容，也添加进去
-                    value.push(`Other: ${otherValue}`);
+            if (Array.isArray(value)) {
+                const otherKey = `${key}_other`;
+                const otherValue = answers[otherKey];
+                
+                if (otherValue && otherValue.trim()) {
+                    const hasOther = value.includes('Other');
+                    if (hasOther) {
+                        value = value.filter(v => v !== 'Other');
+                        value.push(`Other: ${otherValue}`);
+                    } else if (otherValue.trim()) {
+                        value.push(`Other: ${otherValue}`);
+                    }
                 }
+                submissionData[key] = value.join(', ');
+            } else {
+                submissionData[key] = value || '';
             }
-            submissionData[key] = value.join(', ');
-        } else {
-            // 如果是字符串（文本域）
-            submissionData[key] = value || '';
+        }
+        
+        const params = new URLSearchParams();
+        for (const [key, value] of Object.entries(submissionData)) {
+            params.append(key, value);
+        }
+        
+        showStatus('Submitting, please wait...', 'loading');
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        
+        try {
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: params.toString()
+            });
+            
+            showStatus('Thank you! Your survey has been submitted successfully.', 'success');
+            
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            document.querySelectorAll('textarea').forEach(ta => ta.value = '');
+            document.querySelectorAll('.other-input').forEach(div => div.classList.remove('show'));
+            document.getElementById('businessEmail').value = '';
+            document.getElementById('companyName').value = '';
+            initAnswers();
+            
+        } catch (error) {
+            console.error('Submission Error:', error);
+            showStatus('Submission failed: ' + (error.message || 'Network error'), 'error');
+        } finally {
+            submitBtn.disabled = false;
         }
     }
-    
-    const params = new URLSearchParams();
-    for (const [key, value] of Object.entries(submissionData)) {
-        params.append(key, value);
-    }
-    
-    showStatus('Submitting, please wait...', 'loading');
-    const submitBtn = document.getElementById('submitBtn');
-    submitBtn.disabled = true;
-    
-    try {
-        await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: params.toString()
-        });
-        
-        showStatus('Thank you! Your survey has been submitted successfully.', 'success');
-        
-        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-        document.querySelectorAll('textarea').forEach(ta => ta.value = '');
-        document.querySelectorAll('.other-input').forEach(div => div.classList.remove('show'));
-        document.getElementById('businessEmail').value = '';
-        document.getElementById('companyName').value = '';
-        initAnswers();
-        
-    } catch (error) {
-        console.error('Submission Error:', error);
-        showStatus('Submission failed: ' + (error.message || 'Network error'), 'error');
-    } finally {
-        submitBtn.disabled = false;
-    }
-}
     
     function showStatus(msg, type) {
         const statusDiv = document.getElementById('statusMessage');
