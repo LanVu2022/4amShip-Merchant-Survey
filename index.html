@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>4amShip Merchant Survey</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+
     <style>
         * {
             margin: 0;
@@ -137,12 +141,129 @@
             gap: 0.75rem;
         }
 
-        @media (min-width: 768px) {
+         .dropdown-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+         .dropdown-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+         .dropdown-label {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #223F61;
+            margin-bottom: 0.75rem;
+        }
+
+         .dropdown-block .dropdown-text {
+            width: 100%;
+        }
+
+         .multiselect {
+            position: relative;
+        }
+
+         .multiselect-toggle {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            text-align: left;
+            border-radius: 1rem;
+            border: 1px solid #d1d5db;
+            background-color: #f9fafb;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            font-family: inherit;
+            color: #111827;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+         .multiselect-toggle:hover {
+            border-color: #43BFA1;
+        }
+
+         .multiselect.open .multiselect-toggle {
+            border-color: #43BFA1;
+            box-shadow: 0 0 0 2px rgba(67, 191, 161, 0.2);
+            background-color: white;
+        }
+
+         .multiselect-summary {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+         .multiselect-summary.placeholder {
+            color: #9ca3af;
+        }
+
+         .multiselect-caret {
+            color: #6b7280;
+            transition: transform 0.2s ease;
+        }
+
+         .multiselect.open .multiselect-caret {
+            transform: rotate(180deg);
+        }
+
+         .multiselect-panel {
+            display: none;
+            position: absolute;
+            z-index: 20;
+            top: calc(100% + 0.25rem);
+            left: 0;
+            right: 0;
+            max-height: 16rem;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem;
+        }
+
+         .multiselect.open .multiselect-panel {
+            display: block;
+        }
+
+         .multiselect-panel .options-grid {
+            grid-template-columns: 1fr;
+            gap: 0.25rem;
+        }
+
+         .multiselect-panel .option-label {
+            border: 1px solid transparent;
+            background: transparent;
+            border-radius: 0.5rem;
+        }
+
+         .multiselect-panel .option-label:hover {
+            background-color: #f3f4f6;
+        }
+         @media (min-width: 768px) {
             .options-grid {
                 grid-template-columns: 1fr 1fr;
                 gap: 0.75rem;
             }
+            .dropdown-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1.25rem 1.5rem;
+            }
         }
+            .dropdown-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1.25rem 1.5rem;
+            }
+        
 
         .option-label {
             display: flex;
@@ -279,11 +400,11 @@
             section: 'Merchant Background',
             items: [
                 { question: '1. What type of business do you operate?', field: 'businessType', options: ['D2C Brand', 'Marketplace Seller', '3PL / Warehouse', 'Retailer', 'Agency / Aggregator', 'Other'] },
-                { question: '2. Which marketplaces or platforms do you currently use?', field: 'platforms', options: ['Shopify', 'Amazon', 'TikTok Shop', 'WooCommerce', 'Walmart', 'eBay', 'Etsy', 'Other'] },
+                { question: '2. Which marketplaces or platforms do you currently use?', field: 'platforms', options: ['Shopify', 'Amazon', 'TikTok Shop', 'WooCommerce', 'Walmart', 'eBay', 'Etsy', 'Other','N/A'] },
                 { question: '3. Approximately how many orders do you ship monthly?', field: 'monthlyOrders', options: ['< 500', '501-2,000', '2,001-5,000', '5,001-10,000', '10,001-25,000', '25,000+'] },
             ]
         },
-         {
+        {
             section: 'Shipping Operations',
             items: [
                 { question: '4. Which shipping platforms/tools do you currently use?', field: 'shippingTools', options: ['ShipStation', 'EasyPost', 'Pirate Ship', 'Shippo', 'EasyShip', 'In-house tools', 'Other','Not using any tools'] },
@@ -291,23 +412,34 @@
                 { question: '6. What are your biggest shipping pain points? Click all that apply.', field: 'painPoints', options: ['High shipping costs', 'Manual operational workload', 'Slow label generation', 'Tracking visibility', 'Carrier reliability', 'Address errors', 'Limited automation', 'Poor customer support', 'Difficult integrations', 'Billing reconciliation', 'Other'] },
                 { question: '7. Where do you currently ship out of?', field: 'shippingLocation', options: ['Home', 'Self-operated warehouse', '3PL (Third Party Logistics)', 'Multiple locations', 'Other'] },
                 { question: '8. How do you typically generate shipping labels?', field: 'labelGeneration', options: ['One label at a time', 'Bulk label generation', 'Automated through rules', 'Generated by warehouse staff','Generated by 3PL partner', 'Other'] },
-                { question: '9. Do you currently use any rules or filters to process orders before label generation?', field: 'useOrderRules', options: ['Yes', 'No'] },
-                { question: '9a. If yes, what types of rules do you use? Click all that apply.', field: 'orderRules', options: ['Route orders by SKU', 'Automatically select cheapest shipping method','Automatically select fastest shipping method', 'Hold orders for manual review', 'Split orders by inventory location','Combine orders by same recipient address','Other','N/A'] },
-                { question: '10. How do you currently decide which shipping method to use for each order?', field: 'carrierSelection', options: ['Always use the same shipping method', 'Manually compare rates each time', 'System automatically picks the cheapest/fastest', 'Use different carriers for different warehouses', 'Use different carriers for different product types', '3PL decides', 'Other'] },
-                { question: '11. What happens when shipment exceptions occur (e.g., address issue, failed delivery, carrier issues)?', field: 'exceptionHandling', options: ['Manually review and correct each one', 'Managed through shipping platform', 'Carrier handles most issues', 'We rarely get exceptions', 'Other'] },
+                { question: '9. What label printing size(s) do you currently use? Click all that apply.', field: 'labelSize', options: ['4" x 6" (Standard thermal)', '4" x 8"', '4" x 4"', '3" x 2"', '2" x 1"', 'Letter/A4 sheet (8.5" x 11")', 'Custom size', 'Other'] },
+                { question: '10. Do you currently use any rules or filters to process orders before label generation?', field: 'useOrderRules', options: ['Yes', 'No'] },
+                { question: '10a. If yes, what types of rules do you use? Click all that apply.', field: 'orderRules', options: ['Route orders by SKU', 'Automatically select cheapest shipping method','Automatically select fastest shipping method', 'Hold orders for manual review', 'Split orders by inventory location','Combine orders by same recipient address','Other','N/A'] },
+                { question: '11. Which shipping services do you currently use? Click all that apply.', dropdowns: [
+                    { label: 'UPS', field: 'upsService', options: ['UPS Ground', 'UPS Ground Saver (SurePost)', 'UPS 3 Day Select', 'UPS 2nd Day Air', 'UPS 2nd Day Air A.M.', 'UPS Next Day Air Saver', 'UPS Next Day Air', 'UPS Next Day Air Early', 'UPS Standard (International)'] },
+                    { label: 'USPS', field: 'uspsService', options: ['USPS Ground Advantage', 'USPS Priority Mail', 'USPS Priority Mail Express', 'USPS First-Class Mail', 'USPS First-Class Package Service', 'USPS Media Mail', 'USPS Parcel Select'] },
+                    { label: 'FedEx', field: 'fedexService', options: ['FedEx Ground', 'FedEx Home Delivery', 'FedEx Ground Economy (SmartPost)', 'FedEx Express Saver', 'FedEx 2Day', 'FedEx 2Day A.M.', 'FedEx Standard Overnight', 'FedEx Priority Overnight', 'FedEx First Overnight', 'FedEx 2Day One Rate', 'FedEx Express Saver One Rate', 'FedEx Standard Overnight One Rate', 'FedEx Priority Overnight One Rate', 'FedEx Ground Economy Parcel Select'] },                    { label: 'Other', field: 'otherService', text: true, placeholder: 'Please specify carrier and service...' }
+                ] },
+                      
+                { question: '12. What happens when shipment exceptions occur (e.g., address issue, failed delivery, carrier issues)?', field: 'exceptionHandling', options: ['Manually review and correct each one', 'Managed through shipping platform', 'Carrier handles most issues', 'We rarely get exceptions', 'Other'] },
             ]                       
         },
         {
             section: 'System Features & Integrations',
             items: [
-                { question: '12. Which kind of the following system do you integrate with your shipping platform? Click all that apply.', field: 'systemIntegrations', options: ['WMS (Warehouse Management System)', 'OMS (Order Management System)', 'ERP (Enterprise Resource Planning)', '3PL / Fulfillment Center Integration', 'Inventory Management System', 'CRM (Customer Relationship Management)', 'Custom / In-house System', 'Other'] },
-                { question: '13. Please specify the names of the systems you selected above (e.g., "Oracle NetSuite ERP", "Manhattan WMS", "Salesforce CRM"):', field: 'systemNames', textarea: true, placeholder: 'Please list the specific system names for each integration you selected...' },
+                { question: '13. Which kind of the following system do you integrate with your shipping platform? Click all that apply.', field: 'systemIntegrations', options: ['WMS (Warehouse Management System)', 'OMS (Order Management System)', 'ERP (Enterprise Resource Planning)', '3PL / Fulfillment Center Integration', 'Inventory Management System', 'CRM (Customer Relationship Management)', 'Custom / In-house System', 'Other'] },
+                { question: '14. Please specify the names of the systems you selected above (e.g., "Oracle NetSuite ERP", "Manhattan WMS", "Salesforce CRM"):', field: 'systemNames', textarea: true, placeholder: 'Please list the specific system names for each integration you selected...' },
             ]
         }
     ];
 
-
     // ==================== 存储答案 ====================
+       // 需要额外填写内容的选项：选中后显示一个输入框
+    const WRITE_IN_OPTIONS = {
+        'Other': 'other',
+        'Custom size': 'custom'
+    };
+
     let answers = {};
 
     function initAnswers() {
@@ -320,11 +452,57 @@
                         answers[item.field] = '';
                     }
                 }
+              if (item.dropdowns) {
+                    for (const dd of item.dropdowns) {
+                        answers[dd.field] = dd.options ? [] : '';
+                    }
+                }               
             }
         }
     }
 
     // ==================== 渲染问卷 ====================
+ // 渲染一组复选框（含 Other 等写入框），供普通题目与分组题目复用
+    function renderCheckboxOptions(fieldName, options) {
+        let html = `<div class="options-grid" id="grid-${fieldName}">`;
+        for (const opt of options) {
+            const escapedOpt = opt.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const writeInSuffix = WRITE_IN_OPTIONS[opt] || '';
+            const isWriteIn = !!writeInSuffix;
+            html += `
+                <div>
+                    <label class="option-label">
+                        <input type="checkbox" value="${escapedOpt}" data-field="${fieldName}" data-writein="${writeInSuffix}">
+                        <span>${opt}</span>
+                    </label>
+            `;
+            if (isWriteIn) {
+                html += `
+                    <div class="other-input" id="writein-${fieldName}-${writeInSuffix}">
+                        <input type="text" placeholder="Please specify..." data-field="${fieldName}" data-suffix="${writeInSuffix}">
+                    </div>
+                `;
+            }
+            html += `</div>`;
+        }
+        html += `</div>`;
+        return html;
+    }
+
+     // 更新多选下拉按钮上的摘要文字
+    function updateMultiselectSummary(field) {
+        const sum = document.getElementById(`mssum-${field}`);
+        if (!sum) return;
+        const arr = Array.isArray(answers[field]) ? answers[field] : [];
+        if (arr.length === 0) {
+            sum.textContent = sum.getAttribute('data-placeholder');
+            sum.classList.add('placeholder');
+        } else {
+            sum.textContent = arr.length === 1 ? arr[0] : `${arr.length} selected`;
+            sum.classList.remove('placeholder');
+        }
+    }
+
     function renderSurvey() {
         const container = document.getElementById('surveyContainer');
         if (!container) return;
@@ -337,30 +515,32 @@
                 html += `<div class="question-block"><div class="question-text">${item.question}</div>`;
 
                 if (item.options) {
-                    html += `<div class="options-grid" id="grid-${fieldName}">`;
-                    for (const opt of item.options) {
-                        const escapedOpt = opt.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                        const isOther = (opt === 'Other');
-                        html += `
-                            <div>
-                                <label class="option-label">
-                                    <input type="checkbox" value="${escapedOpt}" data-field="${fieldName}" data-is-other="${isOther}">
-                                    <span>${opt}</span>
-                                </label>
-                        `;
-                        if (isOther) {
-                            html += `
-                                <div class="other-input" id="other-${fieldName}">
-                                    <input type="text" placeholder="Please specify..." data-field="${fieldName}">
-                                </div>
-                            `;
+                 html += renderCheckboxOptions(fieldName, item.options);
+                } else if (item.textarea) {
+                    html += `<textarea id="textarea-${fieldName}" placeholder="${item.placeholder || 'Type your answer here...'}"></textarea>`;
+                } else if (item.dropdowns) {
+                    html += `<div class="dropdown-grid">`;
+                    for (const dd of item.dropdowns) {
+                        html += `<div class="dropdown-block">`;
+                        html += `<div class="dropdown-label">${dd.label}</div>`;
+                        if (dd.text) {
+                            html += `<input type="text" class="dropdown-text" id="text-${dd.field}" data-field="${dd.field}" placeholder="${dd.placeholder || 'Please specify...'}">`;
+                        } else {
+                            const placeholder = `Select ${dd.label} service(s)`;
+                            html += `<div class="multiselect" id="ms-${dd.field}">`;
+                            html += `<button type="button" class="multiselect-toggle" data-field="${dd.field}">`;
+                            html += `<span class="multiselect-summary placeholder" id="mssum-${dd.field}" data-placeholder="${placeholder}">${placeholder}</span>`;
+                            html += `<span class="multiselect-caret">▾</span>`;
+                            html += `</button>`;
+                            html += `<div class="multiselect-panel">`;
+                            html += renderCheckboxOptions(dd.field, dd.options);
+                            html += `</div>`;
+                            html += `</div>`;
                         }
                         html += `</div>`;
                     }
                     html += `</div>`;
-                } else if (item.textarea) {
-                    html += `<textarea id="textarea-${fieldName}" placeholder="${item.placeholder || 'Type your answer here...'}"></textarea>`;
-                }
+                 }
                 html += `</div>`;
             }
             html += `</div>`;
@@ -372,33 +552,34 @@
             cb.addEventListener('change', function(e) {
                 const fieldName = this.getAttribute('data-field');
                 const value = this.value;
-                const isOther = this.getAttribute('data-is-other') === 'true';
-                
+                const writeInSuffix = this.getAttribute('data-writein');
+                const isWriteIn = !!writeInSuffix;
+
+              
                 if (!answers[fieldName]) answers[fieldName] = [];
                 
                 if (this.checked) {
                     if (!answers[fieldName].includes(value)) {
                         answers[fieldName].push(value);
                     }
-                    if (isOther) {
-                        const otherDiv = document.getElementById(`other-${fieldName}`);
-                        if (otherDiv) otherDiv.classList.add('show');
+                    if (isWriteIn) {
+                        const writeInDiv = document.getElementById(`writein-${fieldName}-${writeInSuffix}`);
+                        if (writeInDiv) writeInDiv.classList.add('show');
                     }
                 } else {
                     const index = answers[fieldName].indexOf(value);
                     if (index > -1) {
                         answers[fieldName].splice(index, 1);
                     }
-                    if (isOther) {
-                        const otherDiv = document.getElementById(`other-${fieldName}`);
-                        if (otherDiv) {
-                            otherDiv.classList.remove('show');
-                            const otherInput = otherDiv.querySelector('input');
-                            if (otherInput) {
-                                otherInput.value = '';
-                                const otherField = `${fieldName}_other`;
-                                delete answers[otherField];
-                            }
+                     if (isWriteIn) {
+                        const writeInDiv = document.getElementById(`writein-${fieldName}-${writeInSuffix}`);
+                        if (writeInDiv) {
+                            writeInDiv.classList.remove('show');
+                            const writeInInput = writeInDiv.querySelector('input');
+                            if (writeInInput) {
+                                writeInInput.value = '';
+                                delete answers[`${fieldName}_${writeInSuffix}`];
+                          }
                         }
                     }
                 }
@@ -409,15 +590,42 @@
         document.querySelectorAll('.other-input input').forEach(input => {
             input.addEventListener('input', function(e) {
                 const fieldName = this.getAttribute('data-field');
-                const otherField = `${fieldName}_other`;
+                const suffix = this.getAttribute('data-suffix');
+                const writeInField = `${fieldName}_${suffix}`;
                 if (this.value.trim()) {
-                    answers[otherField] = this.value.trim();
+                    answers[writeInField] = this.value.trim();
                 } else {
-                    delete answers[otherField];
+                    delete answers[writeInField];
                 }
             });
         });
-        
+ 
+             // 打开/关闭多选下拉面板
+        document.querySelectorAll('.multiselect-toggle').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const ms = this.closest('.multiselect');
+                const willOpen = !ms.classList.contains('open');
+                document.querySelectorAll('.multiselect.open').forEach(o => o.classList.remove('open'));
+                if (willOpen) ms.classList.add('open');
+            });
+        });
+
+         // 多选下拉内的复选框变化后，更新按钮上的摘要文字
+        document.querySelectorAll('.multiselect-panel input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', function(e) {
+                updateMultiselectSummary(this.getAttribute('data-field'));
+            });
+        });
+
+         // 绑定下拉区域内的 Other 文本输入事件
+        document.querySelectorAll('.dropdown-text').forEach(input => {
+            input.addEventListener('input', function(e) {
+                const fieldName = this.getAttribute('data-field');
+                answers[fieldName] = this.value.trim();
+            });
+        });
+
         // 绑定文本域事件
         for (const section of questionsData) {
             for (const item of section.items) {
@@ -435,7 +643,7 @@
 
     // ==================== 提交到 Google Sheet ====================
     // ⚠️ 请替换为你的 Apps Script URL
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/你的ID/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyaTK275s6yOKB3yW9YUUA1Q0ed2V85FZJPXjl6VmC3hmJAHyAbM0aUce5ipRIrOeo/exec';
 
     async function submitToGoogleSheet() {
         const businessEmail = document.getElementById('businessEmail')?.value.trim() || '';
@@ -456,28 +664,24 @@
             companyName: companyName
         };
         
-        // 合并 Other 内容到主字段
-        for (const key in answers) {
-            let value = answers[key];
-            
-            if (Array.isArray(value)) {
-                const otherKey = `${key}_other`;
-                const otherValue = answers[otherKey];
-                
-                if (otherValue && otherValue.trim()) {
-                    const hasOther = value.includes('Other');
-                    if (hasOther) {
-                        value = value.filter(v => v !== 'Other');
-                        value.push(`Other: ${otherValue}`);
-                    } else if (otherValue.trim()) {
-                        value.push(`Other: ${otherValue}`);
-                    }
-                }
-                submissionData[key] = value.join(', ');
-            } else {
-                submissionData[key] = value || '';
+        // 合并 write-in 内容到主字段
+ for (const key in answers) {
+    let value = answers[key];
+
+    if (Array.isArray(value)) {
+        value = [...value];
+        for (const [label, suffix] of Object.entries(WRITE_IN_OPTIONS)) {
+            const writeInValue = answers[`${key}_${suffix}`];
+            if (value.includes(label) && writeInValue && writeInValue.trim()) {
+                value = value.filter(v => v !== label);
+                value.push(`${label}: ${writeInValue.trim()}`);
             }
         }
+        submissionData[key] = value.join(', ');
+    } else {
+        submissionData[key] = value || '';
+    }
+}
         
         const params = new URLSearchParams();
         for (const [key, value] of Object.entries(submissionData)) {
@@ -500,13 +704,12 @@
             
             showStatus('Thank you! Your survey has been submitted successfully.', 'success');
             
-            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-            document.querySelectorAll('textarea').forEach(ta => ta.value = '');
-            document.querySelectorAll('.other-input').forEach(div => div.classList.remove('show'));
             document.getElementById('businessEmail').value = '';
             document.getElementById('companyName').value = '';
             initAnswers();
-            
+
+            renderSurvey();
+
         } catch (error) {
             console.error('Submission Error:', error);
             showStatus('Submission failed: ' + (error.message || 'Network error'), 'error');
@@ -529,6 +732,13 @@
     
     initAnswers();
     renderSurvey();
+
+     // 点击面板外部时关闭所有打开的多选下拉（只绑定一次）
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.multiselect')) {
+            document.querySelectorAll('.multiselect.open').forEach(o => o.classList.remove('open'));
+        }
+    });
     
     const submitBtn = document.getElementById('submitBtn');
     if (submitBtn) {
